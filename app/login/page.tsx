@@ -9,12 +9,10 @@ export default function LoginPage() {
 
             <LoginForm />
 
-            <footer className="mt-12 text-center max-w-2xl px-6 opacity-60">
-                <div className="flex justify-center items-center gap-8 grayscale brightness-75">
-                    {/* <TrustBadge icon="verified_user" label="Enterprise Grade" />
-          <TrustBadge icon="shield" label="SSL Encrypted" />
-          <TrustBadge icon="gpp_good" label="ISO 27001" /> */}
-                </div>
+            <footer className="border-t border-outline-variant/20 mt-auto py-8 text-center text-on-surface-variant text-sm z-10 bg-surface-container-lowest/50 backdrop-blur-sm">
+                <p>FormFlow. Built for DMS project. 2026</p>
+                <p>By Devdat, Pramukh, Pranav | NMAMIT - ISE C</p><br></br>
+                <p>2026 | 4th Semester</p>
             </footer>
         </main>
     );

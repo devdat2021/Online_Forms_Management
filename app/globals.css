@@ -21,6 +21,10 @@
     --color-on-primary-container: #e8ecff;
     --color-primary-fixed: #e8ecff;
     --color-surface-bright: #f9fbff;
+    --color-error: #b3261e;
+    --color-error-container: #f9dedc;
+    --color-on-error: #ffffff;
+    --color-on-error-container: #410e0b;
 }
 
 @layer base {

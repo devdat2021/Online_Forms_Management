@@ -1,3 +1,5 @@
+import { createClient } from "@/utils/supabase";
+
 export default function DashboardPage() {
     return (
         <>
@@ -113,6 +115,11 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </section>
+            <footer className="border-t border-outline-variant/20 mt-auto py-8 text-center text-on-surface-variant text-sm z-10 bg-surface-container-lowest/50 backdrop-blur-sm">
+                <p>FormFlow. Built for DMS project. 2026</p>
+                <p>By Devdat, Pramukh, Pranav | NMAMIT - ISE C</p><br></br>
+                <p>2026 | 4th Semester</p>
+            </footer>
         </>
     );
 }
