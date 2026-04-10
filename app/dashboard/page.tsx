@@ -1,7 +1,38 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase";
+import { getUserSession } from "@/utils/session";
+import { useRouter } from "next/navigation";
+
+const supabase = createClient();
 
 export default function DashboardPage() {
-    return (
+    const [forms, setForms] = useState<any[]>([]);
+    const router = useRouter();
+
+    useEffect(() => {
+        async function loadForms() {
+            const session = getUserSession();
+
+            if (!session) {
+                router.push("/login");
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from("forms")
+                .select("*")
+                .eq("user_id", session.user_id);
+
+            if (!error && data) {
+                setForms(data);
+            }
+        }
+
+        loadForms();
+    }, []);
+  return (
         <>
             {/* Welcome Header */}
             <section className="mb-12">

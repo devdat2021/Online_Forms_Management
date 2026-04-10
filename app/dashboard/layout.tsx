@@ -1,4 +1,5 @@
 import Link from "next/link";
+import UserAvatar from "@/components/UserAvatar";
 
 export default function DashboardLayout({
     children,
@@ -31,10 +32,9 @@ export default function DashboardLayout({
                         <button className="p-2 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-full active:scale-95 duration-200">
                             <span className="material-symbols-outlined">notifications</span>
                         </button>*/}
-                        <div className="h-9 w-9 rounded-full primary-gradient overflow-hidden border border-primary/10 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-primary/20">
-                            D
-                        </div>
+                       
                     </div>
+                     <UserAvatar />
                 </div>
             </header>
 
