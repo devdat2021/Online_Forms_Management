@@ -21,20 +21,11 @@ export default function DashboardLayout({
                         <div className="w-9 h-9 rounded-lg primary-gradient flex items-center justify-center shadow-md shadow-primary/20">
                             <span className="material-symbols-outlined text-white">architecture</span>
                         </div>
-                        <span className="text-lg font-extrabold tracking-tight">FormFlow</span>
+                        <Link href="/" className="text-lg font-extrabold tracking-tight hover:opacity-90 transition-opacity">
+                            FormFlow
+                        </Link>
                     </div>
                     <div className="flex items-center gap-4">
-                        {/* <div className="hidden md:flex items-center bg-surface-container-high px-4 py-2 rounded-full border border-outline-variant/20">
-                            <span className="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
-                            <input
-                                className="bg-transparent border-none focus:ring-0 text-sm w-56 placeholder:text-on-surface-variant/80 outline-none"
-                                placeholder="Search forms..."
-                                type="text"
-                            />
-                        </div> 
-                        <button className="p-2 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-full active:scale-95 duration-200">
-                            <span className="material-symbols-outlined">notifications</span>
-                        </button>*/}
                         <UserInitialAvatar />
                     </div>
 

@@ -31,6 +31,17 @@ export default function HistoryPage() {
     const [attempts, setAttempts] = useState<AttemptRow[]>([]);
     const supabase = useMemo(() => createClient(), []);
 
+    const formatToIST = (dateValue: string) => {
+        const hasTimeZone = /([zZ]|[+-]\d{2}:?\d{2})$/.test(dateValue);
+        const normalized = hasTimeZone ? dateValue : `${dateValue}Z`;
+
+        return new Intl.DateTimeFormat("en-IN", {
+            timeZone: "Asia/Kolkata",
+            dateStyle: "medium",
+            timeStyle: "short",
+        }).format(new Date(normalized));
+    };
+
     useEffect(() => {
         async function loadHistory() {
             setIsLoading(true);
@@ -145,7 +156,7 @@ export default function HistoryPage() {
                         <div className="col-span-5 font-semibold text-on-surface">{attempt.title}</div>
                         <div className="col-span-3 font-mono text-sm text-on-surface-variant">{attempt.form_id}</div>
                         <div className="col-span-4 text-on-surface-variant">
-                            {new Date(attempt.submitted_at).toLocaleString()}
+                            {formatToIST(attempt.submitted_at)}
                         </div>
                     </div>
                 ))}

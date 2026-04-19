@@ -27,9 +27,12 @@ export default function DashboardPage() {
     const [forms, setForms] = useState<DashboardForm[]>([]);
     const [accessCode, setAccessCode] = useState("");
     const [openMenuFormId, setOpenMenuFormId] = useState<string | null>(null);
+    const [copiedFormId, setCopiedFormId] = useState<string | null>(null);
+    const [qrForm, setQrForm] = useState<DashboardForm | null>(null);
     const router = useRouter();
     const supabase = useMemo(() => createClient(), []);
     const openMenuRef = useRef<HTMLDivElement | null>(null);
+    const copyTimeoutRef = useRef<number | null>(null);
 
     useEffect(() => {
         async function loadDashboardData() {
@@ -115,6 +118,14 @@ export default function DashboardPage() {
         };
     }, [openMenuFormId]);
 
+    useEffect(() => {
+        return () => {
+            if (copyTimeoutRef.current !== null) {
+                window.clearTimeout(copyTimeoutRef.current);
+            }
+        };
+    }, []);
+
     const totalSubmissions = useMemo(() => {
         return forms.reduce((acc, form) => acc + form.responseCount, 0);
     }, [forms]);
@@ -148,6 +159,27 @@ export default function DashboardPage() {
         }
 
         setForms((currentForms) => currentForms.filter((form) => form.form_id !== formId));
+    };
+
+    const getPublicFormUrl = (formId: string) => {
+        if (typeof window === "undefined") {
+            return `/forms/${formId}`;
+        }
+
+        return `${window.location.origin}/forms/${formId}`;
+    };
+
+    const handleCopyFormId = async (formId: string) => {
+        await navigator.clipboard.writeText(formId);
+        setCopiedFormId(formId);
+
+        if (copyTimeoutRef.current !== null) {
+            window.clearTimeout(copyTimeoutRef.current);
+        }
+
+        copyTimeoutRef.current = window.setTimeout(() => {
+            setCopiedFormId(null);
+        }, 1200);
     };
 
     return (
@@ -258,7 +290,7 @@ export default function DashboardPage() {
                     {!isLoading && !errorMessage && forms.map((form) => (
                         <div
                             key={form.form_id}
-                            className={`group relative bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/15 hover:border-primary/30 hover:shadow-[0_24px_48px_-12px_rgba(26,27,34,0.08)] transition-all ${openMenuFormId === form.form_id ? "z-30" : "z-0"}`}
+                            className={`group relative rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-5 transition-all hover:border-primary/25 hover:shadow-[0_18px_36px_-16px_rgba(26,27,34,0.12)] ${openMenuFormId === form.form_id ? "z-30" : "z-0"}`}
                         >
                             <div
                                 ref={openMenuFormId === form.form_id ? openMenuRef : undefined}
@@ -307,46 +339,106 @@ export default function DashboardPage() {
                                 )}
                             </div>
 
-                            <h3 className="text-lg font-bold mb-1 group-hover:text-primary transition-colors">
+                            <h3 className="pr-10 text-lg font-bold text-on-surface transition-colors group-hover:text-primary">
                                 {form.title}
                             </h3>
-                            <p className="text-sm text-on-surface-variant mb-4">
+                            <p className="mb-4 text-sm text-on-surface-variant">
                                 Created on {new Date(form.created_at).toLocaleDateString()}
                             </p>
-                            <div className="mb-4 rounded-lg border border-outline-variant/20 bg-surface-container-high p-3">
-                                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary/80 mb-2">Form Code</p>
-                                <div className="flex items-center gap-2">
-                                    <span className="font-mono text-sm tracking-[0.2em] text-on-surface">{form.form_id}</span>
+                            <div className="mb-4 rounded-xl border border-outline-variant/20 bg-surface-container-high px-3 py-2.5">
+                                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/80">Form Code</p>
+                                <div className="flex items-center justify-between gap-2">
+                                    <span className="font-mono text-sm tracking-[0.18em] text-on-surface">{form.form_id}</span>
                                     <button
-                                        onClick={() => navigator.clipboard.writeText(form.form_id)}
-                                        className="rounded border border-outline-variant/20 bg-surface-container-low px-2 py-1 text-xs font-semibold text-on-surface hover:bg-surface-container-base transition"
+                                        type="button"
+                                        onClick={() => handleCopyFormId(form.form_id)}
+                                        className="rounded-md border border-outline-variant/25 bg-surface-container-low px-2 py-1 text-xs font-semibold text-on-surface transition-transform duration-150 hover:bg-surface-container-base active:translate-y-px active:scale-95"
                                     >
-                                        Copy
+                                        {copiedFormId === form.form_id ? "Copied" : "Copy"}
                                     </button>
                                 </div>
                             </div>
-                            <div className="flex items-center justify-between text-xs font-bold text-outline uppercase tracking-widest mb-4">
+                            <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-outline">
                                 <span>{form.questionCount} Questions</span>
                                 <span>{form.responseCount} Responses</span>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="mt-4 flex gap-2">
                                 <button
-                                    onClick={() => router.push(`/dashboard/forms/${form.form_id}/edit`)}
-                                    className="flex-1 px-4 py-2 bg-primary text-on-primary rounded-lg text-sm font-semibold hover:bg-primary/90 transition"
+                                    type="button"
+                                    onClick={() => setQrForm(form)}
+                                    className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-outline-variant/20 bg-surface-container-high px-4 py-2 text-sm font-semibold text-on-surface transition duration-150 hover:bg-surface-container-base active:translate-y-px active:scale-95"
                                 >
-                                    Edit
+                                    <span className="material-symbols-outlined text-[18px]">qr_code_2</span>
+                                    Share QR
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={() => router.push(`/dashboard/forms/${form.form_id}/responses`)}
-                                    className="flex-1 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-lg text-sm font-semibold hover:bg-secondary-container/90 transition"
+                                    className="inline-flex items-center justify-center rounded-lg border border-outline-variant/20 bg-surface-container-high px-4 py-2 text-sm font-semibold text-on-surface transition duration-150 hover:bg-surface-container-base active:translate-y-px active:scale-95"
                                 >
-                                    View Responses
+                                    <span className="material-symbols-outlined text-[18px]">visibility</span>
                                 </button>
                             </div>
                         </div>
                     ))}
                 </div>
             </section>
+
+            {qrForm && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/45 px-4 py-6 backdrop-blur-sm">
+                    <div className="w-full max-w-md overflow-hidden rounded-[2rem] border border-outline-variant/15 bg-surface-container-lowest shadow-2xl">
+                        <div className="flex items-start justify-between gap-4 border-b border-outline-variant/15 px-6 py-5">
+                            <div>
+                                <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary/80">Share as QR</p>
+                                <h3 className="mt-2 text-2xl font-extrabold tracking-tight text-on-surface">{qrForm.title}</h3>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setQrForm(null)}
+                                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-on-surface-variant transition hover:bg-surface-container-high hover:text-on-surface"
+                                aria-label="Close QR modal"
+                            >
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+
+                        <div className="space-y-5 px-6 py-6">
+                            <div className="flex justify-center rounded-[1.5rem] border border-outline-variant/15 bg-white p-4">
+                                <img
+                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(getPublicFormUrl(qrForm.form_id))}`}
+                                    alt={`QR code for ${qrForm.title}`}
+                                    className="h-60 w-60"
+                                />
+                            </div>
+
+                            <div className="rounded-2xl border border-outline-variant/15 bg-surface-container-high px-4 py-3 text-sm text-on-surface-variant break-all">
+                                {getPublicFormUrl(qrForm.form_id)}
+                            </div>
+
+                            <div className="flex flex-col gap-3 sm:flex-row">
+                                <button
+                                    type="button"
+                                    onClick={() => handleCopyFormId(qrForm.form_id)}
+                                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-3xl bg-primary px-5 py-3 text-sm font-semibold text-on-primary shadow-lg shadow-primary/20 transition hover:shadow-xl active:translate-y-px active:scale-95"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">content_copy</span>
+                                    Copy Code
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(getPublicFormUrl(qrForm.form_id));
+                                    }}
+                                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-3xl border border-outline-variant/15 bg-surface-container-high px-5 py-3 text-sm font-semibold text-on-surface transition hover:bg-surface-container-base active:translate-y-px active:scale-95"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">link</span>
+                                    Copy Link
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
             <footer className="border-t border-outline-variant/20 mt-auto py-8 text-center text-on-surface-variant text-sm z-10 bg-surface-container-lowest/50 backdrop-blur-sm">
                 <p>FormFlow. Built for DMS project. 2026</p>
                 <p>By Devdat, Pramukh, Pranav | NMAMIT - ISE C</p><br></br>

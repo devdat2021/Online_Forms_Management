@@ -139,6 +139,17 @@ export default function FormAnswerPage() {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
   };
 
+  const getQuestionOptions = (question: QuestionRow): string[] => {
+    if (!Array.isArray(question.question_options)) {
+      return [];
+    }
+
+    return question.question_options
+      .filter((option): option is string => typeof option === "string")
+      .map((option) => option.trim())
+      .filter((option) => option.length > 0);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMessage(null);
@@ -259,10 +270,10 @@ export default function FormAnswerPage() {
   return (
     <main className="min-h-screen bg-surface px-6 py-16 text-on-surface">
       <div className="mx-auto flex max-w-4xl flex-col gap-8">
-        <div className="rounded-3xl border border-outline-variant/15 bg-surface-container-lowest p-10 shadow-sm">
+        <div className="h-1.5 w-50 rounded-full primary-gradient" />
+        <div className="rounded-3xl border border-primary/15 bg-gradient-to-br from-surface-container-lowest via-surface-container-lowest to-primary/5 p-10 shadow-[0_18px_42px_-20px_rgba(63,81,255,0.45)]">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary/80 mb-2">Form Code</p>
               <h1 className="text-4xl font-extrabold tracking-tight">{form?.title}</h1>
               {form?.description && <p className="mt-4 text-on-surface-variant">{form.description}</p>}
             </div>
@@ -307,7 +318,13 @@ export default function FormAnswerPage() {
                         <p className="text-base font-semibold">{question.question_text}</p>
                         {question.is_required && <p className="text-xs text-on-surface-variant">Required</p>}
                       </div>
-                      <span className="self-start text-xs uppercase tracking-[0.2em] text-on-surface-variant sm:shrink-0">{question.question_type === "long_text" ? "Paragraph" : "Answer"}</span>
+                      <span className="self-start text-xs uppercase tracking-[0.2em] text-on-surface-variant sm:shrink-0">
+                        {question.question_type === "long_text"
+                          ? "Paragraph"
+                          : question.question_type === "multiple_choice" || question.question_type === "mcq"
+                            ? "Multiple Choice"
+                            : "Answer"}
+                      </span>
                     </div>
                     {question.question_type === "long_text" ? (
                       <textarea
@@ -318,6 +335,32 @@ export default function FormAnswerPage() {
                         placeholder="Type your answer here"
                         disabled={alreadySubmitted}
                       />
+                    ) : question.question_type === "multiple_choice" || question.question_type === "mcq" ? (
+                      <div className="space-y-2">
+                        {getQuestionOptions(question).length > 0 ? (
+                          getQuestionOptions(question).map((option) => (
+                            <label
+                              key={`${question.question_id}-${option}`}
+                              className="flex cursor-pointer items-center gap-3 rounded-2xl border border-outline-variant/15 bg-surface-container-high px-4 py-3 text-sm text-on-surface transition hover:border-primary/40"
+                            >
+                              <input
+                                type="radio"
+                                name={`question-${question.question_id}`}
+                                value={option}
+                                checked={value === option}
+                                onChange={(event) => handleAnswerChange(question.question_id, event.target.value)}
+                                disabled={alreadySubmitted}
+                                className="h-4 w-4 border-outline-variant/30 text-primary focus:ring-primary"
+                              />
+                              <span>{option}</span>
+                            </label>
+                          ))
+                        ) : (
+                          <div className="rounded-2xl border border-outline-variant/15 bg-surface-container-high px-4 py-3 text-sm text-on-surface-variant">
+                            This multiple-choice question has no options yet.
+                          </div>
+                        )}
+                      </div>
                     ) : (
                       <input
                         value={value}
