@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import LoginForm from "@/app/login/LoginForm";
 
 export default function LoginPage() {
@@ -7,7 +8,15 @@ export default function LoginPage() {
             <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px]" />
             <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-secondary/5 blur-[120px]" />
 
-            <LoginForm />
+            <Suspense
+                fallback={
+                    <div className="w-full max-w-[440px] z-10 rounded-xl border border-outline-variant/15 bg-surface-container-lowest p-10 text-center text-on-surface-variant">
+                        Loading sign in...
+                    </div>
+                }
+            >
+                <LoginForm />
+            </Suspense>
 
             <footer className="border-t border-outline-variant/20 mt-auto py-8 text-center text-on-surface-variant text-sm z-10 bg-surface-container-lowest/50 backdrop-blur-sm">
                 <p>FormFlow. Built for DMS project. 2026</p>
