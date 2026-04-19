@@ -1,4 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import SignOutButton from "./SignOutButton";
 import UserInitialAvatar from "./UserInitialAvatar";
 import CreateFormButton from "./CreateFormButton";
@@ -9,6 +13,16 @@ export default function DashboardLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const pathname = usePathname();
+
+    useEffect(() => {
+        setIsSidebarOpen(false);
+    }, [pathname]);
+
+    const myFormsActive = pathname !== "/dashboard/history";
+    const historyActive = pathname === "/dashboard/history";
+
     return (
         <div className="bg-surface font-body text-on-surface antialiased min-h-screen relative overflow-hidden">
             <div className="absolute top-[-15%] left-[-10%] w-[40%] h-[45%] rounded-full bg-primary/8 blur-[120px] -z-10" />
@@ -16,8 +30,20 @@ export default function DashboardLayout({
 
             {/* TopNavBar */}
             <header className="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-md border-b border-outline-variant/20 shadow-[0_8px_24px_-16px_rgba(26,27,34,0.2)]">
-                <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-3">
+                        <button
+                            type="button"
+                            onClick={() => setIsSidebarOpen((open) => !open)}
+                            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-outline-variant/20 bg-surface-container-lowest text-on-surface-variant md:hidden"
+                            aria-label="Toggle dashboard menu"
+                            aria-expanded={isSidebarOpen}
+                            aria-controls="dashboard-sidebar"
+                        >
+                            <span className="material-symbols-outlined text-[20px]">
+                                {isSidebarOpen ? "close" : "menu"}
+                            </span>
+                        </button>
                         <div className="w-9 h-9 rounded-lg primary-gradient flex items-center justify-center shadow-md shadow-primary/20">
                             <span className="material-symbols-outlined text-white">architecture</span>
                         </div>
@@ -33,15 +59,38 @@ export default function DashboardLayout({
             </header>
 
             <div className="flex min-h-screen pt-[72px]">
+                <button
+                    type="button"
+                    onClick={() => setIsSidebarOpen(false)}
+                    className={`fixed inset-0 z-30 bg-black/35 backdrop-blur-[1px] transition-opacity md:hidden ${isSidebarOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
+                    aria-hidden={!isSidebarOpen}
+                    tabIndex={-1}
+                />
+
                 {/* SideNavBar */}
-                <aside className="h-[calc(100vh-72px)] w-64 fixed left-0 top-[72px] bg-surface-container-lowest/80 backdrop-blur-sm flex flex-col gap-2 p-4 text-sm font-medium z-40 border-r border-outline-variant/15">
+                <aside
+                    id="dashboard-sidebar"
+                    className={`h-[calc(100vh-72px)] w-72 max-w-[85vw] md:w-64 fixed left-0 top-[72px] bg-surface-container-lowest/90 backdrop-blur-sm flex flex-col gap-2 p-4 text-sm font-medium z-40 border-r border-outline-variant/15 transition-transform duration-200 md:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+                >
 
                     <nav className="space-y-1">
-                        <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 bg-surface-container-high text-primary shadow-sm rounded-lg transition-all border border-outline-variant/15">
+                        <Link
+                            href="/dashboard"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all border ${myFormsActive
+                                ? "bg-surface-container-high text-primary shadow-sm border-outline-variant/15"
+                                : "text-on-surface-variant border-transparent hover:text-primary hover:translate-x-1"
+                                }`}
+                        >
                             <span className="material-symbols-outlined">description</span>
                             <span>My Forms</span>
                         </Link>
-                        <Link href="/dashboard/history" className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all">
+                        <Link
+                            href="/dashboard/history"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all border ${historyActive
+                                ? "bg-surface-container-high text-primary shadow-sm border-outline-variant/15"
+                                : "text-on-surface-variant border-transparent hover:text-primary hover:translate-x-1"
+                                }`}
+                        >
                             <span className="material-symbols-outlined">history</span>
                             <span>History</span>
                         </Link>
@@ -62,7 +111,7 @@ export default function DashboardLayout({
                 </aside>
 
                 {/* Main Canvas where page.tsx renders */}
-                <main className="ml-64 flex-1 p-8 lg:p-12 max-w-7xl mx-auto w-full relative z-10">
+                <main className="ml-0 md:ml-64 flex-1 p-4 sm:p-6 lg:p-12 max-w-7xl mx-auto w-full relative z-10">
                     {children}
                 </main>
             </div>

@@ -185,7 +185,7 @@ export default function DashboardPage() {
     return (
         <>
             {/* Welcome Header */}
-            <section className="mb-12">
+            <section className="mb-8 sm:mb-10 md:mb-12">
                 <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-2">
                     Dashboard
                 </h1>
@@ -195,9 +195,9 @@ export default function DashboardPage() {
             </section>
 
             {/* Grid: Enter Code & Recent Stats */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 mb-10 sm:mb-12 md:mb-16">
                 {/* Enter Form Code Block */}
-                <div className="lg:col-span-2 bg-surface-container-lowest p-8 rounded-2xl shadow-[0_24px_48px_-12px_rgba(26,27,34,0.04)] border border-outline-variant/15 flex flex-col justify-between">
+                <div className="lg:col-span-2 bg-surface-container-lowest p-5 sm:p-6 md:p-8 rounded-2xl shadow-[0_24px_48px_-12px_rgba(26,27,34,0.04)] border border-outline-variant/15 flex flex-col justify-between">
                     <div>
                         <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-surface-container-high text-primary rounded-full text-xs font-bold tracking-wider uppercase mb-4 border border-outline-variant/20">
                             <span className="material-symbols-outlined text-[14px]">vpn_key</span>
@@ -208,7 +208,7 @@ export default function DashboardPage() {
                             Access a form by entering its unique identification string below.
                         </p>
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                         <div className="flex-1 relative">
                             <input
                                 value={accessCode}
@@ -221,7 +221,7 @@ export default function DashboardPage() {
                                     }
                                 }}
                                 maxLength={6}
-                                className="w-full bg-surface-container-high border-b-2 border-primary border-t-0 border-l-0 border-r-0 rounded-t-lg px-6 py-4 outline-none focus:ring-0 transition-all text-xl font-mono tracking-widest placeholder:opacity-30"
+                                className="w-full bg-surface-container-high border-b-2 border-primary border-t-0 border-l-0 border-r-0 rounded-t-lg px-4 sm:px-6 py-3.5 sm:py-4 outline-none focus:ring-0 transition-all text-lg sm:text-xl font-mono tracking-[0.35em] sm:tracking-widest placeholder:opacity-30"
                                 placeholder="XXXXX"
                                 type="text"
                             />
@@ -233,7 +233,7 @@ export default function DashboardPage() {
                                 if (normalizedValue) router.push(`/forms/${normalizedValue}`);
                             }}
                             disabled={!accessCode.trim()}
-                            className="px-8 py-4 primary-gradient text-on-primary font-bold rounded-lg shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 primary-gradient text-on-primary font-bold rounded-lg shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <span>Start Form</span>
                             <span className="material-symbols-outlined">arrow_forward</span>
@@ -242,9 +242,9 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Quick Stats */}
-                <div className="primary-gradient text-on-primary p-8 rounded-2xl relative overflow-hidden group shadow-[0_24px_48px_-16px_rgba(63,81,255,0.45)]">
+                <div className="primary-gradient text-on-primary p-5 sm:p-6 md:p-8 rounded-2xl relative overflow-hidden group shadow-[0_24px_48px_-16px_rgba(63,81,255,0.45)]">
                     <div className="relative z-10 h-full flex flex-col justify-between">
-                        <div className="text-7xl font-black opacity-60 group-hover:opacity-30 transition-opacity">
+                        <div className="text-5xl sm:text-6xl md:text-7xl font-black opacity-60 group-hover:opacity-30 transition-opacity">
                             {totalSubmissions}
                         </div>
                         <div>
@@ -260,15 +260,15 @@ export default function DashboardPage() {
             </div>
 
             {/* Created by You Section */}
-            <section className="mb-16">
-                <div className="flex items-end justify-between mb-8">
+            <section className="mb-12 md:mb-16">
+                <div className="flex items-end justify-between mb-6 sm:mb-8">
                     <div>
                         <h2 className="text-2xl font-bold text-on-surface">Created by You</h2>
                         <div className="h-1 w-12 primary-gradient mt-2 rounded-full"></div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
                     {isLoading && (
                         <div className="md:col-span-2 xl:col-span-3 bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/15 text-on-surface-variant">
                             Loading your forms...
@@ -290,7 +290,7 @@ export default function DashboardPage() {
                     {!isLoading && !errorMessage && forms.map((form) => (
                         <div
                             key={form.form_id}
-                            className={`group relative rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-5 transition-all hover:border-primary/25 hover:shadow-[0_18px_36px_-16px_rgba(26,27,34,0.12)] ${openMenuFormId === form.form_id ? "z-30" : "z-0"}`}
+                            className={`group relative rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-4 sm:p-5 transition-all hover:border-primary/25 hover:shadow-[0_18px_36px_-16px_rgba(26,27,34,0.12)] ${openMenuFormId === form.form_id ? "z-30" : "z-0"}`}
                         >
                             <div
                                 ref={openMenuFormId === form.form_id ? openMenuRef : undefined}
@@ -348,7 +348,7 @@ export default function DashboardPage() {
                             <div className="mb-4 rounded-xl border border-outline-variant/20 bg-surface-container-high px-3 py-2.5">
                                 <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/80">Form Code</p>
                                 <div className="flex items-center justify-between gap-2">
-                                    <span className="font-mono text-sm tracking-[0.18em] text-on-surface">{form.form_id}</span>
+                                    <span className="font-mono text-sm tracking-[0.14em] sm:tracking-[0.18em] text-on-surface">{form.form_id}</span>
                                     <button
                                         type="button"
                                         onClick={() => handleCopyFormId(form.form_id)}
@@ -374,7 +374,7 @@ export default function DashboardPage() {
                                 <button
                                     type="button"
                                     onClick={() => router.push(`/dashboard/forms/${form.form_id}/responses`)}
-                                    className="inline-flex items-center justify-center rounded-lg border border-outline-variant/20 bg-surface-container-high px-4 py-2 text-sm font-semibold text-on-surface transition duration-150 hover:bg-surface-container-base active:translate-y-px active:scale-95"
+                                    className="inline-flex items-center justify-center rounded-lg border border-outline-variant/20 bg-surface-container-high px-3 sm:px-4 py-2 text-sm font-semibold text-on-surface transition duration-150 hover:bg-surface-container-base active:translate-y-px active:scale-95"
                                 >
                                     <span className="material-symbols-outlined text-[18px]">visibility</span>
                                 </button>
@@ -385,8 +385,8 @@ export default function DashboardPage() {
             </section>
 
             {qrForm && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/45 px-4 py-6 backdrop-blur-sm">
-                    <div className="w-full max-w-md overflow-hidden rounded-[2rem] border border-outline-variant/15 bg-surface-container-lowest shadow-2xl">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/45 px-3 sm:px-4 py-4 sm:py-6 backdrop-blur-sm">
+                    <div className="w-full max-w-md overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-outline-variant/15 bg-surface-container-lowest shadow-2xl">
                         <div className="flex items-start justify-between gap-4 border-b border-outline-variant/15 px-6 py-5">
                             <div>
                                 <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary/80">Share as QR</p>
@@ -402,12 +402,12 @@ export default function DashboardPage() {
                             </button>
                         </div>
 
-                        <div className="space-y-5 px-6 py-6">
-                            <div className="flex justify-center rounded-[1.5rem] border border-outline-variant/15 bg-white p-4">
+                        <div className="space-y-4 sm:space-y-5 px-4 sm:px-6 py-5 sm:py-6">
+                            <div className="flex justify-center rounded-[1.5rem] border border-outline-variant/15 bg-white p-3 sm:p-4">
                                 <img
                                     src={`https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(getPublicFormUrl(qrForm.form_id))}`}
                                     alt={`QR code for ${qrForm.title}`}
-                                    className="h-60 w-60"
+                                    className="h-52 w-52 sm:h-60 sm:w-60"
                                 />
                             </div>
 
@@ -439,7 +439,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
             )}
-            <footer className="border-t border-outline-variant/20 mt-auto py-8 text-center text-on-surface-variant text-sm z-10 bg-surface-container-lowest/50 backdrop-blur-sm">
+            <footer className="border-t border-outline-variant/20 mt-auto py-8 text-center text-on-surface-variant text-xs sm:text-sm z-10 bg-surface-container-lowest/50 backdrop-blur-sm px-4">
                 <p>FormFlow. Built for DMS project. 2026</p>
                 <p>By Devdat, Pramukh, Pranav | NMAMIT - ISE C</p><br></br>
                 <p>2026 | 4th Semester</p>

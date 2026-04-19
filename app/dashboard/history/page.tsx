@@ -116,7 +116,7 @@ export default function HistoryPage() {
 
     return (
         <>
-            <section className="mb-10">
+            <section className="mb-8 sm:mb-10">
                 <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-2">
                     History
                 </h1>
@@ -126,24 +126,24 @@ export default function HistoryPage() {
             </section>
 
             <section className="bg-surface-container-lowest rounded-2xl border border-outline-variant/15 overflow-hidden">
-                <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-surface-container-low border-b border-outline-variant/15 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
+                <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-surface-container-low border-b border-outline-variant/15 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
                     <div className="col-span-5">Form Title</div>
                     <div className="col-span-3">Form Code</div>
                     <div className="col-span-4">Attempted At</div>
                 </div>
 
                 {isLoading && (
-                    <div className="px-6 py-8 text-on-surface-variant">Loading history...</div>
+                    <div className="px-4 sm:px-6 py-8 text-on-surface-variant">Loading history...</div>
                 )}
 
                 {!isLoading && errorMessage && (
-                    <div className="px-6 py-8 text-on-error-container bg-error-container">
+                    <div className="px-4 sm:px-6 py-8 text-on-error-container bg-error-container">
                         {errorMessage}
                     </div>
                 )}
 
                 {!isLoading && !errorMessage && attempts.length === 0 && (
-                    <div className="px-6 py-8 text-on-surface-variant">
+                    <div className="px-4 sm:px-6 py-8 text-on-surface-variant">
                         No attempted forms found yet.
                     </div>
                 )}
@@ -151,12 +151,25 @@ export default function HistoryPage() {
                 {!isLoading && !errorMessage && attempts.map((attempt, index) => (
                     <div
                         key={`${attempt.form_id}-${attempt.submitted_at}-${index}`}
-                        className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-outline-variant/10 last:border-b-0"
+                        className="border-b border-outline-variant/10 last:border-b-0"
                     >
-                        <div className="col-span-5 font-semibold text-on-surface">{attempt.title}</div>
-                        <div className="col-span-3 font-mono text-sm text-on-surface-variant">{attempt.form_id}</div>
-                        <div className="col-span-4 text-on-surface-variant">
-                            {formatToIST(attempt.submitted_at)}
+                        <div className="grid grid-cols-12 gap-4 px-6 py-4 hidden md:grid">
+                            <div className="col-span-5 font-semibold text-on-surface">{attempt.title}</div>
+                            <div className="col-span-3 font-mono text-sm text-on-surface-variant">{attempt.form_id}</div>
+                            <div className="col-span-4 text-on-surface-variant">
+                                {formatToIST(attempt.submitted_at)}
+                            </div>
+                        </div>
+
+                        <div className="md:hidden px-4 py-4 space-y-2">
+                            <p className="text-sm font-semibold text-on-surface break-words">{attempt.title}</p>
+                            <div className="flex items-center justify-between gap-3 rounded-lg border border-outline-variant/15 bg-surface-container-high px-3 py-2">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">Code</span>
+                                <span className="font-mono text-sm tracking-[0.14em] text-on-surface">{attempt.form_id}</span>
+                            </div>
+                            <p className="text-xs text-on-surface-variant">
+                                Attempted at {formatToIST(attempt.submitted_at)}
+                            </p>
                         </div>
                     </div>
                 ))}
