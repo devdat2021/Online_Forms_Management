@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import SignOutButton from "./SignOutButton";
 import UserInitialAvatar from "./UserInitialAvatar";
 import CreateFormButton from "./CreateFormButton";
+import ThemeToggle from "@/app/components/ThemeToggle";
 
 
 export default function DashboardLayout({
@@ -106,6 +107,7 @@ export default function DashboardLayout({
                         <CreateFormButton />
                     </div>
                     <div className="mt-auto pb-4 space-y-1">
+                        <ThemeToggle />
                         <SignOutButton />
                     </div>
                 </aside>

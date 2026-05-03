@@ -4,6 +4,7 @@
     --font-body: var(--font-inter), "Inter", ui-sans-serif, system-ui, -apple-system,
         "Segoe UI", sans-serif;
 
+    /* Light mode (default) */
     --color-primary: #3f51ff;
     --color-secondary: #1f6fff;
     --color-surface: #f6f7fb;
@@ -38,6 +39,31 @@
         font-family: var(--font-body);
         background-color: var(--color-surface);
         color: var(--color-on-surface);
+    }
+
+    /* Dark mode colors */
+    html.dark {
+        --color-primary: #7c8cff;
+        --color-secondary: #6ba9ff;
+        --color-surface: #0f1419;
+        --color-surface-container-lowest: #0a0e13;
+        --color-surface-container-low: #161b22;
+        --color-surface-container-high: #21262e;
+        --color-on-surface: #e2e7f1;
+        --color-on-surface-variant: #b5bfd3;
+        --color-on-primary: #1f2565;
+        --color-outline: #808d9e;
+        --color-outline-variant: #555f75;
+        --color-primary-container: #5258d9;
+        --color-secondary-container: #0a47a1;
+        --color-on-secondary-container: #cce5ff;
+        --color-on-primary-container: #e8ecff;
+        --color-primary-fixed: #e8ecff;
+        --color-surface-bright: #1a202a;
+        --color-error: #f2b8b5;
+        --color-error-container: #8c1d18;
+        --color-on-error: #601410;
+        --color-on-error-container: #f9dedc;
     }
 }
 
