@@ -1,8 +1,10 @@
 import Link from "next/link";
+import ServerDownBanner from "./components/ServerDownBanner";
 
 export default function LandingPage() {
   return (
     <main className="bg-surface font-body text-on-surface min-h-screen flex flex-col relative overflow-hidden">
+      <ServerDownBanner />
       {/* Abstract Background Blobs (Matched to Login Page) */}
       <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[120px] -z-10" />
       <div className="absolute top-[40%] right-[-10%] w-[30%] h-[50%] rounded-full bg-secondary/10 blur-[120px] -z-10" />
